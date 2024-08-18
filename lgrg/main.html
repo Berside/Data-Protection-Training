@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="mam">
+        <p>Пользователь:</p>
+        <p id="user-email"></p>
+    </div>
+    <div class="bab">
+        <p>Admin: <span id="user-level"></span></p>
+    </div>
+    <div class="bab">
+        <p> <a href="/log" onclick="logout()"> Выход </a> </p>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+            document.getElementById('user-email').textContent = userEmail;
+        }
+    fetch(`/user-level?email=${encodeURIComponent(userEmail)}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.level);
+            let isAdminText = '';
+            switch (String(data.level)) { // Преобразование в строку
+    case '3':
+        isAdminText = 'Администратор';
+        break;
+    case '2':
+        isAdminText = 'Модератор';
+        break;
+    case '1':
+        isAdminText = 'Хелпер';
+        break;
+    default:
+        isAdminText = 'Нет';
+}
+            document.getElementById('user-level').textContent = isAdminText;
+        })
+        .catch(error => console.error('Error fetching user level:', error));
+});
+
+    </script>
+</body>
+</html> 
