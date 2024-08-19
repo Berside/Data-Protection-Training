@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
     <div class="login">
@@ -24,31 +24,6 @@
             <p>Don't have an account? <a href="/reg">Sign Up</a></p> 
         </div>
     </div>
-    <script> 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('submit').addEventListener('click', function(event) {
-            event.preventDefault(); 
-            const email = document.getElementById('Email').value;
-            const password = document.getElementById('Password').value;
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ Email: email, Password: password})
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.setItem('userEmail', email);
-                    window.location.href = '/main'; 
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Ошибка при входе в систему:', error));
-        });
-    });
-    </script>
+    <script src="scripts/log.js"> </script>
 </body>
 </html>

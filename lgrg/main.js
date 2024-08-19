@@ -42,17 +42,14 @@ app.get('/users', async (req, res) => {
 });
 // Отправляет HTML файл main.html в ответ на GET запрос к /main.
 app.get('/main', (req, res) => {
-    console.log('Request received for /main');
     res.sendFile(path.join(__dirname, 'main.html'));
 });
 // Аналогично предыдущему, но для маршрута /log.
 app.get('/log', (req, res) => {
-    console.log('Request received for /log');
     res.sendFile(path.join(__dirname, 'log.html'));
 });
 // Отправляет HTML файл reg.html в ответ на GET запрос к /reg.
 app.get('/reg', (req, res) => {
-    console.log('Request received for /reg');
     res.sendFile(path.join(__dirname, 'reg.html'));
 });
 // Запуск сервера
@@ -61,12 +58,12 @@ app.listen(3000, () => {
 });
 // Обрабатывает POST запросы к /users, добавляет нового пользователя в базу данных с указанным email и паролем.
 app.post('/users', async (req, res) => {
-    const { Email, Password, Code } = req.body;
+    const { Email, Password} = req.body;
     try {
         const hashedPassword = await bcrypt.hash(Password, 10); // Хэширование пароля с использованием 10 раундов соли
         const [result] = await pool.query(
-            `INSERT INTO user (Email, Password, Code) VALUES (?,?,?)`,
-            [Email, hashedPassword, Code]
+            `INSERT INTO user (Email, Password) VALUES (?,?)`,
+            [Email, hashedPassword]
         );
         res.status(201).json({ message: "Пользователь успешно добавлен" });
     } catch (err) {
@@ -74,11 +71,9 @@ app.post('/users', async (req, res) => {
         res.status(500).send('Произошла ошибка при добавлении пользователя.');
     }
 });
-
+// Обрабатывает POST-запросы на вход в систему. Пользователь отправляет свои учетные данные (Email и Пароль), которые затем проверяются на соответствие записям в базе данных.
 app.post('/login', async (req, res) => {
-    console.log(req.body);
     const { Email, Password } = req.body;
-    console.log(`Login attempt for ${Email}`);
     try {
         const [rows] = await pool.query('SELECT * FROM user WHERE Email = ?', [Email]);
         if (rows.length > 0) {
@@ -97,13 +92,13 @@ app.post('/login', async (req, res) => {
         res.status(500).send('Ошибка сервера');
     }
 });
-
+// Получает уровень пользователя по его Email. Этот метод используется для определения доступных прав пользователя внутри системы.
 app.get('/user-level', async (req, res) => {
-    const { email } = req.query; // Получаем email из query параметра
+    const { email } = req.query; 
     try {
         const [rows] = await pool.query('SELECT Level FROM user WHERE Email = ?', [email]);
         if (rows.length > 0) {
-            const userLevel = rows[0].Level; // Предполагается, что у вас есть столбец Level в таблице user
+            const userLevel = rows[0].Level; 
             res.json({ level: userLevel });
         } else {
             res.status(404).json({ success: false, message: "Пользователь не найден" });

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
     <div class ="Reg">
@@ -35,87 +35,6 @@
             <p>We have account <a href="/log">Login</a></p> 
         </div>
     </div>
-    <script>
-
-    let generatedCode;
-
-document.getElementById('code').addEventListener('click', function() {
-    fetch('/generate-code')
-        .then(response => response.json())
-        .then(data => {
-            generatedCode = data.code; // Store the generated code
-            document.getElementById('Unicode').value = generatedCode;
-            console.log('Generated code:', generatedCode);
-        })
-        .catch(error => console.error('Error getting code:', error));
-});
-
-document.getElementById('submit').addEventListener('click', function() {
-    event.preventDefault();
-    const email = document.getElementById('Email').value;
-    const password = document.getElementById('Password').value;
-    const repeat = document.getElementById('PasswordX2').value;
-    const enteredCode = document.getElementById('Unicode').value;
-    if (!email.includes('@')) {
-        alert('Please enter a valid email address.');
-        return; 
-    }
-    if (password.length < 7) {
-        alert('Password must be at least 7 characters long.');
-        return; 
-    }
-    if (repeat != password) {
-        alert('Error');
-        return;
-    }
-            if (enteredCode !== generatedCode) {
-            alert('Incorrect code entered.');
-            return;
-            }
-    fetch('/users')
-       .then(response => response.json())
-       .then(data => {
-            const user = data.find(userArray => {
-                for (let i = 0; i < userArray.length; i++) {
-                    if (userArray[i].Email === email) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            if (user) {
-                alert('This login and password combination is already taken.');
-                return; 
-            }
-            const employeeData = {
-                Email: email,
-                Password: password,
-                Code: enteredCode,
-            };
-            fetch('/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(employeeData),
-            })
-           .then(response => response.json())
-           .then(data => {
-                console.log('Success:', data);
-                window.location.href = '/log';
-            })
-           .catch((error) => {
-                console.error('Error:', error);
-            });
-            fetch('/users')
-            .then(response => response.json())
-            .then(data => {
-                window.location.href = '/log';
-    })
-    .catch(error => console.error('Ошибка при получении данных:', error));
-        })
-       .catch(error => console.error('Ошибка при получении данных:', error));
-    });
-    </script>
+    <script src="scripts/reg.js"> </script>
 </body>
 </html>
