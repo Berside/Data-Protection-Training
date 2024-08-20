@@ -1,37 +1,66 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
-body{
+
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    flex-direction: column;
+    background: #000;
 }
 
-a{
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    background: #000;
+    position: relative;
+    width: 400px;
+    height: auto;
+    box-shadow: 0 0 50px #fff;
+    border-radius: 20px;
+    padding: 40px;
+    overflow: hidden;
+}
+
+.main .main-event {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.bab {
+    font-size: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+.sign-up-link {
+    font-size: 14px;
+    text-align: center;
+    margin: 15px 0;
+}
+
+.sign-up-link p {
+    color: #fff;
+}
+
+.sign-up-link p a {
+    color: #fff;
     text-decoration: none;
+    font-weight: 500;
 }
-a:hover{
+
+.sign-up-link p a:hover {
     text-decoration: underline;
-}
-section a{
-    color: #555;
-}
-.mam{
-    font-size: 15px;
-    font-weight: 600;
-}
-.bab{
-    font-size: 25px;
-    margin-top: 10px;
-}
-.bab a{
-    color: #000;
-    font-weight: 600;
-}
-p{
-    font-size: 35px;
 }

@@ -1,5 +1,15 @@
-
 let generatedCode;
+
+function validateEmail(email) {
+    if (!email.includes('@')) {
+        return false;
+    }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+        return false;
+    }
+    return true;
+}
 
 document.getElementById('code').addEventListener('click', function() {
     fetch('/generate-code')
@@ -17,7 +27,7 @@ document.getElementById('submit').addEventListener('click', function() {
     const password = document.getElementById('Password').value;
     const repeat = document.getElementById('PasswordX2').value;
     const enteredCode = document.getElementById('Unicode').value;
-    if (!email.includes('@')) {
+    if (!(validateEmail(email))) {
         alert('Please enter a valid email address.');
         return; 
     }
@@ -29,10 +39,10 @@ document.getElementById('submit').addEventListener('click', function() {
         alert('Error');
         return;
     }
-            if (enteredCode !== generatedCode) {
-            alert('Incorrect code entered.');
-            return;
-            }
+    if (enteredCode !== generatedCode) {
+        alert('Incorrect code entered.');
+        return;
+    }
     fetch('/users')
        .then(response => response.json())
        .then(data => {
@@ -44,6 +54,11 @@ document.getElementById('submit').addEventListener('click', function() {
                 }
                 return false;
             });
+            const userExists = data.some(user => user.Email === email);
+            if (userExists) {
+                alert('This email is already registered.');
+                return;
+            }
             if (user) {
                 alert('This login and password combination is already taken.');
                 return; 
