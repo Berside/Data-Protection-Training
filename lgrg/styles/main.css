@@ -64,3 +64,34 @@ body {
 .sign-up-link p a:hover {
     text-decoration: underline;
 }
+#user-data-table {
+    margin-left: 80px;
+    width: 20%; 
+    box-shadow: 0 0 50px #fff;
+    border-radius: 20px;
+}
+
+#user-data-table th, #user-data-table td {
+    padding: 5px; 
+    text-align: center; 
+    color: white; 
+    background-color: black; 
+    border-radius: 20px;
+}
+
+#user-data-table tr:nth-child(even) {
+    background-color: #444; 
+}
+
+#user-data-table tr:hover {
+    background-color: #555;
+}
+.delete-icon {
+    width: 20px;
+    height: 20px; 
+    cursor: pointer;
+}
+
+.delete-icon:hover {
+    opacity: 0.8; 
+}

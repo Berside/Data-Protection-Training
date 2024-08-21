@@ -60,7 +60,7 @@ app.listen(3000, () => {
 app.post('/users', async (req, res) => {
     const { Email, Password} = req.body;
     try {
-        const hashedPassword = await bcrypt.hash(Password, 10); // Хэширование пароля с использованием 10 раундов соли
+        const hashedPassword = await bcrypt.hash(Password, 10); 
         const [result] = await pool.query(
             `INSERT INTO user (Email, Password) VALUES (?,?)`,
             [Email, hashedPassword]
@@ -106,5 +106,19 @@ app.get('/user-level', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Ошибка сервера');
+    }
+});
+// Удаляет пользователя из базы данных по предоставленному ID.
+app.delete('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [result] = await pool.query(`DELETE FROM user WHERE id = ?`, [id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).send('User not found.');
+        }
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while deleting the user.');
     }
 });
