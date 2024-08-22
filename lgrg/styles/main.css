@@ -87,11 +87,21 @@ body {
     background-color: #555;
 }
 .delete-icon {
-    width: 20px;
-    height: 20px; 
+    width: 30px;
+    height: 30px; 
     cursor: pointer;
 }
 
 .delete-icon:hover {
     opacity: 0.8; 
+}
+
+.change-icon {
+    width: 30px;
+    height: 30px; 
+    cursor: pointer;
+}
+
+.change-icon:hover {
+    opacity: 0.8;
 }

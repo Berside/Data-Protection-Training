@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 localStorage.setItem('userEmail', email);
-                window.location.href = '/main'; 
+                window.location.href = '/faq'; 
             } else {
                 alert(data.message);
             }
         })
-        .catch(error => console.error('Ошибка при входе в систему:', error));
+        .catch(error => console.error('Error logging in:', error));
     });
 });

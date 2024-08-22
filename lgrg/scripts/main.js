@@ -10,19 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
             let isAdminText = '';
             switch (String(data.level)) { 
                 case '3': 
-                    isAdminText = 'Администратор';
+                    isAdminText = 'Administrator';
                     break;
                 case '2':
-                    isAdminText = 'Модератор';
+                    isAdminText = 'Moderator';
                     break;
                 case '1':
-                    isAdminText = 'Хелпер';
+                    isAdminText = 'Helper';
                     break;
-                default:
+                default:ё
                     isAdminText = 'Нет';
             }
             document.getElementById('user-level').textContent = isAdminText;
-            if (isAdminText === 'Хелпер') {
+            if (isAdminText === 'Helper') {
                 fetch('/users')
                 .then(response => response.json())
                 .then(userData => {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => console.error('Error fetching user data:', error));
             }
-            if (isAdminText === 'Модератор') {
+            if (isAdminText === 'Moderator') {
                 fetch('/users')
                 .then(response => response.json())
                 .then(userData => {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const deleteIconTd = document.createElement('td');
                             const deleteIcon = document.createElement('img');
                             deleteIcon.src = 'imgs/remove.png'; 
-                            deleteIcon.alt = 'Удалить пользователя';
+                            deleteIcon.alt = 'Delete a user';
                             deleteIcon.classList.add('delete-icon'); 
                             deleteIconTd.appendChild(deleteIcon);
                             deleteIcon.onclick = function() {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => console.error('Error fetching user data:', error));
             }
-            if (isAdminText === 'Администратор') {
+            if (isAdminText === 'Administrator') {
                 fetch('/users')
                     .then(response => response.json())
                     .then(userData => {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         table.id = 'user-data-table';
                         const thead = document.createElement('thead');
                         const headerRow = document.createElement('tr');
-                        ['ID', 'Email', 'Level', 'Delete'].forEach(headerText => {
+                        ['ID', 'Email', 'Level', 'Delete', 'Change Level'].forEach(headerText => {
                             const th = document.createElement('th');
                             th.textContent = headerText;
                             headerRow.appendChild(th);
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     tr.appendChild(td);
                                 }
                             });
-                            if ((user.level !== 3))  {
+                            if (user.level !== 3) { 
                                 const deleteIconTd = document.createElement('td');
                                 const deleteIcon = document.createElement('img');
                                 deleteIcon.src = 'imgs/remove.png'; 
@@ -135,6 +135,21 @@ document.addEventListener('DOMContentLoaded', function() {
                                 };
                                 tr.appendChild(deleteIconTd);
                             }
+                            if (user.level !== 3) {
+                                const changeIconTd = document.createElement('td');
+                                const changeIcon = document.createElement('img');
+                                changeIcon.src = 'imgs/pencil.png';
+                                changeIcon.alt = 'Change the user level';
+                                changeIcon.classList.add('change-icon');
+                                changeIconTd.appendChild(changeIcon);
+                                changeIcon.onclick = function() {
+                                    const newLevel = prompt("Enter a new user level");
+                                    if (newLevel) {
+                                        changeUserLevel(user.id, newLevel);
+                                    }
+                                };
+                                tr.appendChild(changeIconTd);
+                            }
                             tbody.appendChild(tr);
                         });
                         table.appendChild(tbody);
@@ -142,6 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => console.error('Error fetching user data:', error));
             }
+            
+            
         })
         .catch(error => console.error('Error fetching user level:', error));
 });
@@ -149,10 +166,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function deleteUser(userId) {
     const currentUserId = localStorage.getItem('userEmail');
     if (userId === currentUserId) {
-        alert('Вы не можете удалить самого себя.');
+        alert('You cannot delete yourself.');
         return; 
     }
-    if (!confirm('Вы действительно хотите удалить этого пользователя?')) {
+    if (!confirm('Do you really want to delete this user?')) {
         return; 
     }
     fetch(`/users/${userId}`, {
@@ -160,15 +177,42 @@ function deleteUser(userId) {
     })
     .then(response => {
         if (response.ok) {
-            alert('Пользователь успешно удален.');
+            alert('The user has been successfully deleted.');
             location.reload(); 
         } else {
-            throw new Error('Ошибка при удалении пользователя');
+            throw new Error('Error when deleting a user');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Ошибка при удалении пользователя');
+        alert('Error when deleting a user');
     });
 }
 
+function changeUserLevel(userId, newLevel) {
+    if (!confirm('Are you sure you want to change this user level?')) {
+        return;
+    }
+    fetch('/change-user-level', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId: userId, 
+            newLevel: newLevel
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('The user level has been successfully changed.');
+            location.reload();
+        } else {
+            throw new Error(`Error when changing the user level: ${response.statusText}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(`Error when changing the user level: ${error.message || 'Unknown error'}`);
+    });
+}

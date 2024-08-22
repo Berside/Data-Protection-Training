@@ -86,7 +86,7 @@ document.getElementById('submit').addEventListener('click', function() {
             .then(data => {
                 window.location.href = '/log';
     })
-    .catch(error => console.error('Ошибка при получении данных:', error));
+    .catch(error => console.error('Error receiving data:', error));
         })
-       .catch(error => console.error('Ошибка при получении данных:', error));
+       .catch(error => console.error('Error receiving data:', error));
     });

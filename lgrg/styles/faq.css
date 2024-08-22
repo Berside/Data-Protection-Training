@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    background: #000;
+}
+
+.FAQ {
+    width: 100%; 
+}
+header {
+    display: flex; 
+    justify-content: flex-end; 
+    align-items: center; 
+    background-color: black; 
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 5px;
+}
+.email-link{
+    font-size: 20px;
+    color: #fff;
+    margin-right: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.exit-link {
+    font-size: 20px;
+    color: #fff;
+    margin-right: 10px; 
+    border-radius: 10px;
+    overflow: hidden;
+}
+.exit-link p {
+    color: #fff;
+  }
+.email-link p {
+    color: #fff;
+}
+.exit-link p a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+.email-link p a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.email-link p a:hover {
+    text-decoration: underline;
+}
+
+.exit-link p a:hover {
+    text-decoration: underline;
+}
+.main-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.wrapper {
+    margin-top: 50px;
+    box-shadow: 0 0 50px #fff;
+    border-radius: 20px;
+    color: #fff;
+    height: 600px;
+    width: 80%; 
+    max-width: 600px; 
+    padding: 20px;
+}
+
+.form-wrapper.sign-in {
+    text-align: center;
+}
+
+h2 {
+    font-size: 25px;
+}
+.link{
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+.link:hover {
+    text-decoration: underline;
+}

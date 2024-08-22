@@ -65,10 +65,10 @@ app.post('/users', async (req, res) => {
             `INSERT INTO user (Email, Password) VALUES (?,?)`,
             [Email, hashedPassword]
         );
-        res.status(201).json({ message: "Пользователь успешно добавлен" });
+        res.status(201).json({ message: "The user has been successfully added" });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Произошла ошибка при добавлении пользователя.');
+        res.status(500).send('An error occurred while adding a user.');
     }
 });
 // Обрабатывает POST-запросы на вход в систему. Пользователь отправляет свои учетные данные (Email и Пароль), которые затем проверяются на соответствие записям в базе данных.
@@ -80,16 +80,16 @@ app.post('/login', async (req, res) => {
             const user = rows[0];
             const validPassword = await bcrypt.compare(Password, user.Password);
             if (validPassword) {
-                res.json({ success: true, message: "Пользователь успешно вошел в систему" });
+                res.json({ success: true, message: "The user has successfully logged in" });
             } else {
-                res.status(401).json({ success: false, message: "Неверный пароль" });
+                res.status(401).json({ success: false, message: "Invalid password" });
             }
         } else {
-            res.status(404).json({ success: false, message: "Пользователь не найден" });
+            res.status(404).json({ success: false, message: "The user was not found" });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Ошибка сервера');
+        res.status(500).send('Server error');
     }
 });
 // Получает уровень пользователя по его Email. Этот метод используется для определения доступных прав пользователя внутри системы.
@@ -101,11 +101,11 @@ app.get('/user-level', async (req, res) => {
             const userLevel = rows[0].Level; 
             res.json({ level: userLevel });
         } else {
-            res.status(404).json({ success: false, message: "Пользователь не найден" });
+            res.status(404).json({ success: false, message: "The user was not found" });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Ошибка сервера');
+        res.status(500).send('Server error');
     }
 });
 // Удаляет пользователя из базы данных по предоставленному ID.
@@ -121,4 +121,25 @@ app.delete('/users/:id', async (req, res) => {
         console.error(err);
         res.status(500).send('An error occurred while deleting the user.');
     }
+});
+// Этот метод обрабатывает PUT-запрос на изменение уровня пользователя в базе данных.
+app.put('/change-user-level', async (req, res) => {
+    const { userId, newLevel } = req.body;
+    try {
+        const [result] = await pool.query(
+            `UPDATE user SET Level = ? WHERE id = ?`,
+            [newLevel, userId]
+        );
+        if (result.changedRows === 0) {
+            return res.status(404).send('User not found or no changes made.');
+        }
+        res.status(200).json({ message: "The user's level has been successfully changed" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred when changing the user level.');
+    }
+});
+// Отправляет HTML файл faq.html в ответ на GET запрос к /faq.
+app.get('/faq', (req, res) => {
+    res.sendFile(path.join(__dirname, 'faq.html'));
 });
